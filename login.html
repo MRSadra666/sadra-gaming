@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShadowG | ورود به حساب کاربری</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6e00ff;
+            --secondary: #ff00aa;
+            --dark: #0a0a14;
+            --darker: #05050a;
+            --light: #f0f0f0;
+            --glow: 0 0 15px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--darker), var(--dark));
+            color: var(--light);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* Particles Background */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: rgba(110, 0, 255, 0.5);
+            border-radius: 50%;
+            animation: floatParticle linear infinite;
+        }
+
+        @keyframes floatParticle {
+            0% {
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(100px);
+                opacity: 0;
+            }
+        }
+
+        /* Login Container */
+        .login-container {
+            background: rgba(20, 20, 30, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(110, 0, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(110, 0, 255, 0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: var(--glow) rgba(110, 0, 255, 0.3);
+            margin-bottom: 20px;
+        }
+
+        .logo i {
+            font-size: 2.2rem;
+        }
+
+        .login-title {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: var(--light);
+        }
+
+        .login-subtitle {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        /* Login Form */
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--light);
+            font-weight: 500;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(110, 0, 255, 0.3);
+            border-radius: 10px;
+            color: var(--light);
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 15px rgba(110, 0, 255, 0.3);
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .remember-forgot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: -10px;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .remember-me input {
+            accent-color: var(--primary);
+        }
+
+        .forgot-password {
+            color: var(--secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+
+        .login-btn {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+            box-shadow: 0 0 20px rgba(110, 0, 255, 0.3);
+        }
+
+        .login-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 30px rgba(110, 0, 255, 0.5);
+        }
+
+        .social-login {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .social-login p {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .social-login p::before,
+        .social-login p::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 30%;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .social-login p::before {
+            left: 0;
+        }
+
+        .social-login p::after {
+            right: 0;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .social-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--light);
+            font-size: 1.2rem;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .social-icon:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .social-icon.google {
+            background: linear-gradient(to right, #4285F4, #34A853, #FBBC05, #EA4335);
+            background-size: 300% 100%;
+            animation: gradient 4s ease infinite;
+        }
+
+        .social-icon.twitch {
+            background: #9146FF;
+        }
+
+        .social-icon.discord {
+            background: #5865F2;
+        }
+
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 30px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .register-link a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .register-link a:hover {
+            color: var(--secondary);
+            text-decoration: underline;
+        }
+
+        /* Language Switcher */
+        .language-switcher {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: var(--light);
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .language-switcher:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .login-container {
+                padding: 30px 20px;
+                margin: 20px;
+                width: calc(100% - 40px);
+            }
+
+            .login-title {
+                font-size: 1.5rem;
+            }
+
+            .logo {
+                font-size: 1.8rem;
+            }
+
+            .social-login p::before,
+            .social-login p::after {
+                width: 25%;
+            }
+        }
+
+        /* Language Switch */
+        [lang="en"] {
+            direction: ltr;
+        }
+
+        [lang="en"] .input-icon {
+            left: auto;
+            right: 15px;
+        }
+
+        [lang="en"] .language-switcher {
+            left: auto;
+            right: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Particles -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Language Switcher -->
+  
+
+    <!-- Login Container -->
+    <div class="login-container">
+        <div class="login-header">
+            <div class="logo">
+                <i class="fas fa-gamepad"></i>
+                <span>ShadowG</span>
+            </div>
+            <h1 class="login-title">ورود به حساب کاربری</h1>
+            <p class="login-subtitle">برای دسترسی به تمام ویژگی های ShadowG وارد شوید</p>
+        </div>
+
+        <form class="login-form">
+            <div class="input-group">
+                <label for="username">نام کاربری یا ایمیل</label>
+                <div style="position: relative;">
+                    <input type="text" id="username" class="input-field" placeholder="نام کاربری یا ایمیل خود را وارد کنید" required>
+                    <i class="fas fa-user input-icon"></i>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label for="password">رمز عبور</label>
+                <div style="position: relative;">
+                    <input type="password" id="password" class="input-field" placeholder="رمز عبور خود را وارد کنید" required>
+                    <i class="fas fa-lock input-icon"></i>
+                </div>
+            </div>
+
+            <div class="remember-forgot">
+                <div class="remember-me">
+                    <input type="checkbox" id="remember">
+                    <label for="remember">مرا به خاطر بسپار</label>
+                </div>
+                <a href="#" class="forgot-password">رمز عبور را فراموش کرده اید؟</a>
+            </div>
+
+            <button type="submit" class="login-btn">ورود به حساب</button>
+        </form>
+
+        <div class="social-login">
+            <p>یا با استفاده از</p>
+            <div class="social-icons">
+                <a href="#" class="social-icon google">
+                    <i class="fab fa-google"></i>
+                </a>
+                <a href="#" class="social-icon twitch">
+                    <i class="fab fa-twitch"></i>
+                </a>
+                <a href="#" class="social-icon discord">
+                    <i class="fab fa-discord"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="register-link">
+            حساب کاربری ندارید؟ <a href="#">ثبت نام کنید</a>
+        </div>
+    </div>
+
+    <script>
+        // Floating Particles
+        const particlesContainer = document.getElementById('particles');
+        const particleCount = 50;
+
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            
+            // Random properties
+            const size = Math.random() * 5 + 1;
+            const posX = Math.random() * window.innerWidth;
+            const duration = Math.random() * 20 + 10;
+            const delay = Math.random() * 10;
+            
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            particle.style.left = `${posX}px`;
+            particle.style.animationDuration = `${duration}s`;
+            particle.style.animationDelay = `${delay}s`;
+            particle.style.opacity = Math.random() * 0.5 + 0.1;
+            
+            particlesContainer.appendChild(particle);
+        }
+
+   
+
+        // Form Submission
+        document.querySelector('.login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Add your login logic here
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            console.log('Login attempt with:', username, password);
+            
+            // Simulate loading
+            const btn = document.querySelector('.login-btn');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> در حال ورود...';
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                btn.innerHTML = 'ورود به حساب';
+                btn.disabled = false;
+                // Show success/error message
+            }, 2000);
+        });
+
+        // Glow effect on focus
+        const inputs = document.querySelectorAll('.input-field');
+        inputs.forEach(input => {
+            input.addEventListener('focus', () => {
+                input.style.boxShadow = '0 0 15px rgba(110, 0, 255, 0.3)';
+            });
+            
+            input.addEventListener('blur', () => {
+                input.style.boxShadow = 'none';
+            });
+        });
+    </script>
+</body>
+</html>
